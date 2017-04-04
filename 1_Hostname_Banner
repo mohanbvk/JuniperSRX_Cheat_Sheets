@@ -1,0 +1,13 @@
+#
+# Create a hostname and banner
+#
+# < 650; Standalone
+#
+
+#START
+
+set system host-name [NAME]
+
+set system login message "YOUR BANNER HERE"
+
+#END
