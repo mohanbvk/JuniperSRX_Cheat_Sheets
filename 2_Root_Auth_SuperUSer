@@ -1,0 +1,19 @@
+#
+# Setting root authentication and creating a super user.
+#
+# < 650; Standalone
+#
+
+#START
+
+set system root-authentication plain-text-password [ENTER]
+
+#:
+#:
+
+set system login user [USERNAME] class super-user authentication plain-text-password [ENTER]
+
+#:
+#:
+
+#END
