@@ -48,4 +48,25 @@ set interfaces ge-0/0/0 unit 0 family inet filter input COUNT_ICMP
 set interfaces ge-0/0/0 unit 0 family inet filter input BAD_BOYS
 set interfaces ge-0/0/0 unit 0 family inet filter input BAD_PORT
 
+# 1.5
 #
+# Blocking IP Options using Filters
+#
+
+set firewall filter BLOCK_IP_OPTIONS term 1 from ip-options route-record
+set firewall filter BLOCK_IP_OPTIONS term 1 from ip-options router-alert
+set firewall filter BLOCK_IP_OPTIONS term 1 from ip-options security
+set firewall filter BLOCK_IP_OPTIONS term 1 from ip-option stream-id
+set firewall filter BLOCK_IP_OPTIONS term 1 from ip-option strict-source-route
+set firewall filter BLOCK_IP_OPTIONS term 1 from ip-option timestamp
+set firewall filter BLOCK_IP_OPTIONS term 1 then discard
+
+set firewall filter BLOCK_IP_OPTIONS term 2 then accept
+
+set interfaces ge-0/0/1.0 family inet filter input BLOCK_IP_OPTIONS
+
+# 1.6
+#
+# Implementation case
+#
+
