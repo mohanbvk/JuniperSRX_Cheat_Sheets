@@ -1,0 +1,51 @@
+
+#
+# Example Firewall Filters and Screens configuration
+#
+
+#START
+
+# 1. Sample Firewall Filter configuration
+
+# 1.1
+#
+# Count the ICMP packets
+#
+
+set firewall filter COUNT_ICMP term 1 from protocol icmp
+set firewall filter COUNT_ICMP term 1 then count icmp_packets
+set firewall filter COUNT_ICMP term 1 then accept
+
+set firewall filter COUNT_ICMP term 2 then accept
+
+# 1.2
+#
+# Block a bad subnet
+#
+
+set firewall filter BAD_BOYS term 1 from source-address 192.168.10.0/24
+set firewall filter BAD_BOYS term 1 then count bad_boys
+set firewall filter BAD_BOYS term 1 then discard
+
+set firewall filter BAD_BOYS term 2 then accept
+
+# 1.3
+#
+# Block a bad port
+#
+
+set firewall filter BAD_PORT term 1 from destination-port 1434
+set firewall filter BAD_PORT term 1 then discard
+
+set firewall filter BAD_PORT term 2 then accept
+
+# 1.4
+#
+# Apply the filters to the Interfaces
+#
+
+set interfaces ge-0/0/0 unit 0 family inet filter input COUNT_ICMP
+set interfaces ge-0/0/0 unit 0 family inet filter input BAD_BOYS
+set interfaces ge-0/0/0 unit 0 family inet filter input BAD_PORT
+
+#
