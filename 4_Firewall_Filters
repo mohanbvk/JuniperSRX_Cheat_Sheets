@@ -120,4 +120,6 @@ set firewall filter SRX_RE_PROTECTION term DENY_ANY_OTHER_SNMP_NTP then discard
 
 set firewall filter SRX_RE_PROTECTION term ALLOW_EVERYTHING_ELSE then accept
 
+set interfaces lo0 unit 0 family inet filter input SRX_RE_PROTECTION
+
 #END
