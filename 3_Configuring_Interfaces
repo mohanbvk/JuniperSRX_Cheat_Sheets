@@ -18,6 +18,7 @@ set security zones security-zone [ZONE NAME] interfaces [INTERFACE.UNIT_NUMBER]
 set interfaces [INTERFACE] unit [NUMBER] description "INTERFACE DESCRIPTION"
 set interfaces [INTERFACE] unit [NUMBER] vlan-id [VLAN TAG]
 set interfaces [INTERFACE] unit [NUMBER] family inet address [IP ADDRESS]/[MASK]
+
 set security zones security-zone [ZONE NAME] interfaces [INTERFACE.UNIT_NUMBER]
 
 #END
