@@ -124,4 +124,14 @@ set firewall filter SRX_RE_PROTECTION term ALLOW_EVERYTHING_ELSE then accept
 
 set interfaces lo0 unit 0 family inet filter input SRX_RE_PROTECTION
 
+# 1.7
+#
+# Policing the traffic to RE, lo0
+#
+
+set firewall policer [NAME] loopback-interface-policer
+set firewall policer [NAME] if-exceeding bandwidth-limit 100m
+set firewall policer [NAME] if-exceeding burst-size-limit 500k
+set firewall policer [NAME] then discard
+
 #END
