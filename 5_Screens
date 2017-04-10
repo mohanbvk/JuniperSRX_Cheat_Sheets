@@ -57,4 +57,175 @@ set security screen ids-option [SCREEN-NAME] ip source-route-option
 # Basic IP screening
 #
 
+set security screen ids-option [SCREEN-NAME] ip bad-option
 
+# Blocks malformed packets
+
+set security screen ids-option [SCREEN-NAME] ip unknown-protocol
+
+# Blocks the packets with unknow protocol ID field
+
+set security screen ids-option [SCREEN-NAME] ip block-frag
+
+# Blocks IP fragments, NOT RECOMMENDED
+
+set security screen ids-option [SCREEN-NAME] ip spoofing
+
+# (RPF) Reverse Path Forwarding block
+
+#
+# Case 1.4
+#
+# Basic ICMP Screening
+#
+
+set security screen ids-option [SCREEN-NAME] icmp fragment
+
+# Blocks ICMP IP fragments
+
+set security screen ids-option [SCREEN-NAME] icmp large
+
+# Blocks huge ICMP payloads
+
+# Case 1.5
+#
+# Basic TCP Screening
+#
+
+set security screen ids-option [SCREEN-NAME] tcp tcp-no-flag
+
+# Blocks the TCP IP packets with no flags set
+
+set security screen ids-option [SCREEN-NAME] tcp syn-fin
+
+# Blocks the TCP IP packets with SYN and FIN flags set
+
+set security screen ids-option [SCREEN-NAME] tcp syn-frag
+
+# Blocks the TCP IP packet fragemts with SYN flag set
+
+#
+# Case 1.6
+#
+# Basic Denial-of-Service Screening
+#
+
+set security screen ids-option [SCREEN-NAME] ip tear-drop
+
+# Blocks the Teardrop attack, IP packet fragments overlapping with each other
+
+set security screen ids-option [SCREEN-NAME] ip land
+
+# Blocks the Land attack, IP packet with Source IP/Port same as Destination IP/Port
+
+#
+# Case 1.7
+#
+# Advanced Denial-of-Service and Distributed Denail-of-Service Screening
+#
+# Service Floods and Bandwidth Floods
+#
+
+# 1.7.1
+#
+# ICMP
+
+set security screen ids-option [SCREEN-NAME] icmp flood threshold 10000
+
+# Allows 10,000 ICMP packets/second only
+
+# 1.7.2
+#
+# UDP
+
+set security screen ids-option [SCREEN-NAME] udp flood threshold 50000
+
+# Allows 50,000 UDP packets/second. BETTER BE LONG!
+
+# 1.7.3
+#
+# TCP - When we talk about TCP floods, basically it is about SYN Floods
+
+set security screen ids-option [SCREEN-NAME] tcp syn-flood timeout 10
+
+# Timeout value for the embryonic sessions
+
+set security screen ids-options [SCREEN-NAME] tcp syn-flood attack-threshold 1500
+
+# IMPORTANT
+#
+# This will limit the sessions to per destination and port number PER SECOND, once this threshold is reached
+# SRX with proxy the connections to the destination or the port.
+
+set security screen ids-options [SCREEN-NAME] tcp syn-flood source-threshold 500
+
+# Limits the SYN packets FROM a single source to any destination/port to 500
+
+set security screen ids-options [SCREEN-NAME] tcp syn-flood destination-threshold 10000
+
+# Limits the SYN packets TO a single destination from any source to 10,000 # WARNING
+
+#
+# 1.8
+#
+# Session table Screening
+#
+
+set security flow syn-flood-protection-mode syn-cookie
+
+# Enables SYN cookies for the session table policing, uses MD5 for fingerprint
+
+set security screen ids-option [SCREEN-NAME] tcp syn-ack-ack-proxy threshold 500
+
+# SYN ->
+# <- SYN+ACK
+# -> ACK
+# -> ACK
+# -> ACK
+#
+# Enabled proxy once the threshold is reached for a single source
+
+set security screen ids-options [SCREEN-NAME] limit-session limit-session destination-ip-based 20000
+
+# Limit sessions TO a destination to 20,000 # WARNING, this is EGRESS
+
+set security screen ids-options [SCREEN-NAME] limit-session limit-session source-ip-based 500
+
+# Limit sessions FROM a source to 500, INGRESS
+
+set security flow aging early-ageout 20
+set security flow aging high-watermark 90 low-watermark 70
+
+# Aggresively drops the sessions after 20 seconds once the session table reaches 90% capacity, comes back to normal once
+# the session table drops to 70%
+
+#
+# 1.9
+#
+# Alarming the screens for testing before moving to production
+#
+
+set security screen ids-options [SCREEN-NAME] alarm-without-drop
+
+# Sends an alarm to the event logs rather than taking the action specified
+
+#
+# 1.10
+#
+# Applying the screen
+#
+
+set security security zones security-zone [ZONE-NAME] screen [SCREEN-NAME]
+
+# This will be applied to the entire zone, to all the interfaces that are mapped to it
+# All thresholds configured will act for the entire zone, for all the mapped interfaces as a whole.
+
+#
+# 1.11
+#
+# Viewing the screens
+#
+
+show security screen statistics zone [ZONE-NAME]
+show security screen ids-option [SCREEN-NAME]
+show security screen statistics interface [INTERFACE-NAME]
