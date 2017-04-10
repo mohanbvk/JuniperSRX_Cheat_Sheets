@@ -1,0 +1,60 @@
+#
+# Example Screens configuration
+#
+
+#START
+
+#
+# Screens have ICMP, IP, SESSION-LIMIT, TCP and UDP after IDS-OPTIONS
+#
+
+#
+# Case 1.1
+#
+# Recon screening
+#
+
+set security screen ids-option [SCREEN-NAME] icmp ip-sweep threshold 1000 #micro seconds
+
+# Sweeps are measured based on the count of 10, above, a host outside the given zone can only generate 10 ICMP packets to
+# 10 different destinations, means, 10 ICMP packets to 10 different destinations in 0.001 seconds ONLY.
+
+set security screen ids-option [SCREEN-NAME] icmp ip-sweep threshold 1000000
+
+# 10 ICMP packets to 10 different hosts in 1 second # tight
+# Same goes for the TCP and UDP sweeps
+
+set security screen ids-option [SCREEN-NAME] tcp tcp-sweep threshold 1000/1000000
+set security screen ids-option [SCREEN-NAME] udp udp-sweep threshold 1000/1000000
+
+#
+# Case 1.2
+#
+# Port scan screening
+#
+
+set security screen ids-option [SCREEN-NAME] tcp port-scan threshold 1000000 
+
+# Meaning, a single source can send one SYN packet to 10 different ports in 1 second
+
+set security screen ids-option [SCREEN-NAME] tcp fin-no-ack
+
+# Blocks the FIN packets that may get RST as reply for port scans
+
+set security screen ids-option [SCREEN-NAME] ip record-route-option
+set security screen ids-option [SCREEN-NAME] ip timestamp-option
+set security screen ids-option [SCREEN-NAME] ip security-option
+set security screen ids-option [SCREEN-NAME] ip stream-option
+set security screen ids-option [SCREEN-NAME] ip loose-source-route-option
+set security screen ids-option [SCREEN-NAME] ip strict-source-route-option
+set security screen ids-option [SCREEN-NAME] ip source-route-option
+
+# IP Options are mostly not used for Ingress from untrust and are in many cases obsolete, but they can be used for reconn
+
+#
+# Case 1.3
+#
+# Basic IP screening
+#
+
+
