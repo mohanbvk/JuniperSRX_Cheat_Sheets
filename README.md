@@ -6,5 +6,3 @@ Read repo name
 # I'll be adding more and more in coming days.
 #
 # If anyone want to contribute feel free to do so!
-# 
-# # # A FIREWALL CANNOT PROTECT YOUR NETWORK, AN AWESOME NETWORK SECURITY ENGINEER CAN # # #
